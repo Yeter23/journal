@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -22,12 +23,15 @@ public class UserService implements IUserService {
 
     @Override
     public List<User> getUserByRole(Role role) {
-        return List.of();
+        return userRepository.findAllByRole(role);
     }
 
     @Override
     public List<User> getPotentialUsers(List<Integer> ids) {
-        return List.of();
+        if (ids.isEmpty()) {
+           return  getUserByRole(Role.STUDENT);
+        }
+        return userRepository.findAllByRoleAndIdIsNotIn(Role.STUDENT,ids);
     }
 
     @Override
@@ -47,21 +51,28 @@ public class UserService implements IUserService {
 
     @Override
     public User getById(Integer id) {
-        return null;
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw  new GeneralException("User not found");
+        }
+        return user.get();
     }
 
     @Override
     public List<User> getAll() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
     public Page<User> getAll(Pageable pageable) {
-        return null;
+        return userRepository.findAll(pageable);
     }
 
     @Override
     public void delete(Integer id) {
-
+        if (userRepository.existsById(id)) {
+            throw new GeneralException("user not exists");
+        }
+        userRepository.deleteById(id);
     }
 }
