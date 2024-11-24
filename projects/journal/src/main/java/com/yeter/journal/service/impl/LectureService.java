@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 
 public class LectureService implements ILectureService {
-    private final LectureRepository lectureRepository;
+    private  final LectureRepository lectureRepository;
 
     public LectureService(LectureRepository lectureRepository) {
         this.lectureRepository = lectureRepository;
@@ -41,7 +41,7 @@ public class LectureService implements ILectureService {
     }
 
     @Override
-    public Page<Lecture> getAll(Pageable pageable) {
+    public  Page<Lecture>getAll(Pageable pageable) {
         return lectureRepository.findAll(pageable);
     }
 
