@@ -70,7 +70,7 @@ public class UserService implements IUserService {
 
     @Override
     public void delete(Integer id) {
-        if (userRepository.existsById(id)) {
+        if (!userRepository.existsById(id)) {
             throw new GeneralException("user not exists");
         }
         userRepository.deleteById(id);
